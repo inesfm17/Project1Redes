@@ -1,0 +1,68 @@
+NEWNET
+
+VPC'S
+RealServer
+ip 200.109.14.135 255.255.255.192 
+save 
+
+TestServer 
+ip 200.109.14.140 255.255.255.192 
+save 
+
+Nerd
+ip 200.109.14.245 255.255.255.240 
+save
+
+
+config terminal
+interface f0/0 
+ip address 200.109.14.1 255.255.255.192
+no shut
+end
+write
+
+config terminal	
+interface f0/1 
+ip address 200.109.14.225 255.255.255.252 
+no shut
+end
+write 
+
+config terminal
+interface f1/0 
+ip address 200.109.14.234 255.255.255.252
+no shut
+end write
+	
+	
+DHCP: 
+config terminal
+service dhcp 
+ip dhcp excluded-address 200.109.14.129 200.109.14.134
+ip dhcp excluded-address 200.109.14.141 200.109.14.254 
+ip dhcp excluded-address 200.109.14.241 200.109.14.244 
+ip dhcp excluded-address 200.109.14.246 200.109.14.254
+ip dhcp pool CENTER
+network 200.109.14.128 255.255.255.192 
+default-router 200.109.14.190 
+exit
+end
+write 
+config terminal
+ip dhcp pool IT 
+network 200.109.14.240 255.255.255.240 
+default-router 200.109.14.254
+exit
+end
+write
+	
+Ligado a cloud: 
+
+config terminal
+interface f1/1
+ip address 192.168.100.117 255.255.255.0 
+no shut 
+exit
+ip route 0.0.0.0 0.0.0.0 192.168.100.10 
+end
+write 

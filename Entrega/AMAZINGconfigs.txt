@@ -1,0 +1,105 @@
+AMAZING
+
+VPC'S
+MoneyCounter
+ip 10.49.74.5 255.255.254.0
+save 
+
+Boss
+ip 10.49.74.10 255.255.254.0
+save 
+
+NetSurfer
+ip 10.49.72.5 255.255.252.0 
+save
+
+AmazJob
+ip 10.49.64.5 255.255.248.0 
+save 
+
+Router Amazing
+config terminal
+interface f0/0
+ip address 10.49.68.1 255.255.255.252 
+no shut
+end
+write
+
+config terminal
+interface f0/1
+ip address 10.49.68.9 255.255.255.252 
+no shut
+end write 
+
+config terminal
+interface f1/0 
+ip address 200.109.14.65 255.255.255.192
+no shut
+end
+write
+
+NAT/PAT 
+config terminal
+ip nat pool AMAZINGPOOL 200.109.14.200 200.109.14.220 netmask 255.255.255.224 
+
+
+interface f0/0 
+ip nat inside 
+no shut
+end 
+write 
+
+interface f0/1
+ip nat inside
+no shut
+end 
+write 
+
+interface f1/0 
+ip nat outside
+no shut
+end 
+write 
+
+config terminal
+access-list 2 permit 10.49.64.0 0.0.15.255
+
+ip nat inside source list 1 pool AMAZINGPOOL overload
+end
+write 
+
+
+DHCP
+config terminal
+service dhcp
+ip dhcp address excluded-address 10.49.74.1 10.49.74.4
+ip dhcp address excluded-address 10.49.74.11 10.49.74.254
+ip dhcp address excluded-address 10.49.72.1 10.49.72.4
+ip dhcp address excluded-address 10.49.72.6 10.49.72.254
+ip dhcp address excluded-address 10.49.64.1 10.49.64.4
+ip dhcp address excluded-address 10.49.64.6 10.49.64.254
+ip dhcp pool AMAZOFFICE
+network 10.49.74.0 255.255.254.0
+default-router 10.49.75.254 
+exit 
+end
+write 
+config terminal
+ip dhcp pool AMAZWIFI
+network 10.49.72.0 255.255.252.0 
+default-router 10.49.75.254
+exit 
+end
+write 
+config terminal 
+ip dhcp pool AMAZFACTORY 
+network 10.49.64.0 255.255.248.0 
+default-router 10.49.71.254
+exit 
+end
+write
+
+
+
+
+

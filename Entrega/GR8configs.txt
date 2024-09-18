@@ -1,0 +1,76 @@
+GR8
+
+VPC'S
+Lider
+ip 10.193.86.5 255.255.254.0 
+save 
+
+Happy 
+ip 10.193.86.10 255.255.254.0 
+save 
+
+Visitor 
+ip 10.193.87.5 255.255.254.0
+save
+
+
+Router GR8
+config terminal
+interface f0/0 
+ip address 10.193.86.1 255.255.254.0 
+no shut
+end
+write
+
+config terminal
+interface f0/1
+ip address 200.109.14.1 255.255.255.224
+no shut
+end
+write
+
+NAT/PAT
+config terminal
+ip nat pool GR8POOL 200.109.014.40 200.109.014.49 netmask 255.255.255.224
+
+interface f0/0 
+ip nat inside
+no shut
+end 
+write 
+
+interface f0/1
+ip nat outside 
+no shut
+end
+write 
+
+config terminal
+access-list 1 permit 10.193.86.0 0.0.1.255
+ 
+ip nat inside source list 1 pool GR8POOL overload 
+end
+write
+ 
+DHCP
+config terminal
+service dhcp 
+ip dhcp excluded-address 10.193.86.1 10.193.86.4
+ip dhcp excluded-address 10.193.86.11 10.193.86.254
+ip dhcp excluded-address 10.193.87.1 10.193.87.4
+ip dhcp excluded-address 10.193.87.6 10.193.87.254 
+ip dhcp pool OFFICE 
+network 10.193.86.0 255.255.255.0
+default-router 10.193.86.254
+exit
+end
+write 
+config terminal
+ip dhcp pool WIFI
+network 10.193.87.0 255.255.255.0
+default-router 10.193.87.254
+exit
+end
+write
+
+
